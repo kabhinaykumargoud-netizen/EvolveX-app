@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="leader-hero reveal-up">
+  <div><p class="eyebrow">EvolveX Leaderboard</p><h1>Student progress.</h1><p class="muted"></p></div>
+  <div class="leader-mini"><b>{{ students | length }}</b><span>public builders</span></div>
+</section>
+
+<section class="podium reveal-up">
+{% for s in top3 %}
+  <a href="/student/{{ s.id }}" class="podium-card rank-{{ loop.index }} stagger-in">
+    <div class="rank-bubble">#{{ loop.index }}</div>
+    <img src="{{ s.photo }}" alt="{{ s.name }}">
+    <h3>{{ s.name }}</h3><p>{{ s.project_name }}</p><b>{{ s.points }} pts</b>
+  </a>
+{% endfor %}
+</section>
+
+<div class="card leaderboard-card table-wrap reveal-up"><table>
+<tr><th>Rank</th><th>Founder</th><th>Project</th><th>Progress</th><th>Points</th><th>Convos</th><th>Revenue</th><th>Login Streak</th></tr>
+{% for s in students %}{% set width_pct = [s.points, 300] | min / 3 %}{% set style_attr = 'style="width: ' ~ width_pct ~ '%"' %}<tr class="click-row {{ 'featured-row' if s.featured else '' }}" data-href="/student/{{ s.id }}"><td><span class="rank-pill">#{{ loop.index }}</span></td><td><b>{{ s.name }}</b>{% if s.featured %}<span class="tag">Student of the Week</span>{% endif %}</td><td>{{ s.project_name }}<br><span class="muted">{{ s.stage }}</span></td><td><div class="progress"><span {{ style_attr | safe }}></span></div></td><td><b>{{ s.points }}</b></td><td>{{ s.customer_convos }}</td><td>₹{{ '%.0f' | format(s.revenue or 0) }}</td><td>{{ s.streak }} days</td></tr>{% endfor %}
+</table></div>
+{% endblock %}

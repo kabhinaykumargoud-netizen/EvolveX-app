@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title or 'EvolveX Cohort Dashboard' }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="markcon-theme">
+<nav class="nav">
+  <a class="brand" href="/">EvolveX</a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/sessions" class="nav-link">Our Journey</a>
+    <a href="/leaderboard">Leaderboard</a>
+    {% if session.user_id %}
+      <a href="/dashboard">Dashboard</a>
+      <a class="btn ghost" href="/logout">Logout</a>
+    {% else %}
+      <a class="btn" href="/login">Login</a>
+    {% endif %}
+  </div>
+</nav>
+
+<main>
+  {% if messages %}
+    <div class="flash-wrap">
+      {% for m in messages %}<div class="flash {{ m.cat }}">{{ m.msg }}</div>{% endfor %}
+    </div>
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+  <b>EvolveX</b> · Building a more connected startup ecosystem for Bharat.
+</footer>
+<script src="/static/js/app.js"></script>
+</body>
+</html>

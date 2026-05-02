@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="auth card">
+  <h1>Login</h1><p class="muted">Use the demo credentials or your created account.</p>
+  <form method="post" action="/login" class="form">
+    <label>Email<input name="email" type="email" value="lakshmi@evolvex.in" required></label>
+    <label>Password<input name="password" type="password" value="student" required></label>
+    <button class="btn big">Login</button>
+  </form>
+  <p class="muted">Admin: admin@evolvex.in / admin</p>
+</section>
+{% endblock %}

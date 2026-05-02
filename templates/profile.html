@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="profile card reveal-up">
+  <img src="{{ student.photo }}" alt="{{ student.name }}"><div><span class="pill">{{ student.stage }}</span><h1>{{ student.name }}</h1><h2>{{ student.project_name }}</h2><p>{{ student.one_liner }}</p><p><b>Problem:</b> {{ student.problem }}</p><p><b>Points:</b> {{ student.points }} · <b>Revenue:</b> ₹{{ '%.0f' | format(student.revenue or 0) }}</p></div>
+</section>
+<section class="two-col reveal-up">
+  <div class="card stagger-in"><h2>Badges</h2>{% for b in badges %}<span class="badge">{{ b.name }}</span>{% else %}<p class="muted">No badges yet.</p>{% endfor %}</div>
+  <div class="card stagger-in"><h2>Project Links</h2><p><a href="{{ student.project_link }}">Project</a> · <a href="{{ student.linkedin }}">LinkedIn</a></p></div>
+</section>
+<section class="card reveal-up stagger-in"><h2>Journey Timeline</h2><div class="journey">{% for j in journey %}<div><b>{{ j.title }}</b><span>{{ j.created_at }}</span><p>{{ j.details }}</p></div>{% else %}<p>No journey activity yet.</p>{% endfor %}</div></section>
+{% endblock %}

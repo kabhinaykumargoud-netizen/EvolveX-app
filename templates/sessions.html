@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="journey-hero reveal-up">
+    <div>
+        <p class="mini-title">EvolveX Journey So Far</p>
+        <h1>Every session. Every idea. Every step forward.</h1>
+        <p>
+            From introductions to AI, design, entrepreneurship, content creation,
+            and real-world tech implementation — this is the story of what we have been building together.
+        </p>
+    </div>
+</section>
+
+<section class="journey-tabs reveal-up stagger-in">
+    {% for session in sessions %}
+    <a href="#session-{{ loop.index }}" class="journey-tab">
+        {{ loop.index }}. {{ session.date }}
+    </a>
+    {% endfor %}
+</section>
+
+<section class="journey-timeline reveal-up">
+    {% for session in sessions %}
+    <div class="session-card stagger-in" id="session-{{ loop.index }}">
+        <div class="session-image-box">
+            <img src="/static/images/sessions/{{ session.image }}" alt="{{ session.title }}">
+            <span class="session-tag">{{ session.tag }}</span>
+        </div>
+
+        <div class="session-content">
+            <p class="session-date">{{ session.date }}</p>
+            <h2>{{ session.title }}</h2>
+            <p class="session-desc">{{ session.description }}</p>
+
+            <div class="speaker-box">
+                <div>
+                    <small>Speaker</small>
+                    <h3>{{ session.speaker }}</h3>
+                </div>
+
+                {% if session.linkedin %}
+                    <a href="{{ session.linkedin }}" target="_blank" class="linkedin-btn">LinkedIn</a>
+                {% else %}
+                    <span class="linkedin-empty">LinkedIn link to be added</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</section>
+{% endblock %}

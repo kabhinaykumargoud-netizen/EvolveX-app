@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="home-hero-v2 reveal-up">
+  <div class="crazy-bg">
+    <div class="c-blob c-blob-1"></div>
+    <div class="c-blob c-blob-2"></div>
+    <div class="c-blob c-blob-3"></div>
+    <div class="c-blob c-blob-4"></div>
+    <div class="c-glass"></div>
+  </div>
+
+  <div class="hero-copy">
+    <p class="eyebrow">Cohort 1 · 90-Day Founder Sprint</p>
+    <h1>Learn. Build.<br>Launch with EvolveX.</h1>
+    <p class="hero-subtitle">
+      A 90-day builder journey where students explore ideas, learn by doing,
+      talk to real users, and turn small sparks into working projects.
+    </p>
+    <div class="hero-actions">
+      <a class="btn big" href="/leaderboard">See the Builders</a>
+      <a class="btn ghost big" href="/login">Start Building</a>
+    </div>
+  </div>
+</section>
+
+<section class="stats grid-4 reveal-up">
+  <div class="stat stagger-in"><b>{{ stats.c }}</b><span>Students</span></div>
+  <div class="stat stagger-in"><b>{{ students | length }}</b><span>Projects Live</span></div>
+  <div class="stat stagger-in"><b>₹{{ '%.0f' | format(stats.r or 0) }}</b><span>Earned Collectively</span></div>
+  <div class="stat stagger-in"><b>{{ current_week }}/12</b><span>Cohort Week</span></div>
+</section>
+
+<section class="process-section reveal-up">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">90-Day Roadmap</p>
+      <h2>Cohort Timeline</h2>
+    </div>
+    <span>March 21 start · Demo Day at Week 12</span>
+  </div>
+
+  <div class="process-scroll-container">
+    {% for w in range(1,13) %}
+    <div class="process-card {{ 'active' if w <= current_week else '' }} {{ 'demo' if w == 12 else '' }}">
+      <div>
+        <div class="process-num">0{{ w }}</div>
+        <h3>Week {{ w }}</h3>
+        <p>{% if w <= current_week %}Tasks completed or in progress.{% elif w == 12 %}The final pitch and Demo Day.{% else %}Upcoming week module.{% endif %}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="sticky-container reveal-up">
+  <div class="sticky-sidebar">
+    <p class="eyebrow">Student Spotlights</p>
+    <h2>Celebrating small wins and big leaps.</h2>
+  </div>
+  
+  <div class="sticky-content">
+    <div class="spotlight-card stagger-in">
+      <p class="eyebrow">Student of the Week</p>
+
+    {% if featured %}
+    <div class="student-row">
+      <img src="{{ featured.photo }}" alt="{{ featured.name }}">
+      <div>
+        <h2>{{ featured.name }}</h2>
+        <p>{{ featured.project_name or 'Project pending' }} · {{ featured.stage or 'Profile pending' }}</p>
+      </div>
+    </div>
+
+    <blockquote>"{{ featured.quote }}"</blockquote>
+
+    <div class="pill">{{ featured.points }} points</div>
+    {% endif %}
+  </div>
+
+    <div class="win-card-v2 stagger-in">
+      <p class="eyebrow">Weekly Highlight</p>
+
+    {% if win %}
+    <h2>{{ win.title }}</h2>
+    <p>{{ win.description }}</p>
+    <span class="pill">{{ win.name or 'EvolveX' }}</span>
+    {% else %}
+    <h2>No highlighted win yet.</h2>
+    <p>The next student win will appear here.</p>
+    {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="section-head reveal-up">
+  <div>
+    <p class="eyebrow">Student Projects</p>
+    <h2>Ideas currently being shaped</h2>
+  </div>
+  <span>Public student projects</span>
+</section>
+
+<section class="grid-3 reveal-up">
+  {% for s in students %}
+  <a class="card stagger-in" href="/student/{{ s.id }}" style="margin: 0; padding: 32px; display: flex; flex-direction: column; gap: 16px; justify-content: space-between;">
+    <div>
+      <span class="tag">{{ s.category }}</span>
+      <h3 style="margin: 16px 0 8px;">{{ s.project_name or s.name }}</h3>
+      <p style="margin: 0; color: var(--ink-secondary);">{{ s.one_liner }}</p>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--line); padding-top: 16px; margin-top: 16px;">
+      <span class="pill">{{ s.stage or 'Profile pending' }}</span>
+      <b style="font-size: 14px;">View →</b>
+    </div>
+  </a>
+  {% endfor %}
+</section>
+
+<section class="home-gallery-section reveal-up">
+    <div class="gallery-header">
+        <p class="eyebrow">Inside EvolveX</p>
+        <h2>Building, learning, meeting, and growing together.</h2>
+        <p>
+            From rooftop conversations to workshop energy, project expo visits,
+            team meetups, speaker sessions, and founder discussions — this is where
+            the EvolveX journey comes alive.
+        </p>
+    </div>
+
+    <div class="evolvex-gallery">
+        <div class="gallery-card gallery-large stagger-in parallax-img">
+            <img src="/static/images/team/team.jpg" alt="EvolveX team meetup">
+            <div class="gallery-overlay">
+                <span>Community Moments</span>
+                <h3>Building together</h3>
+            </div>
+        </div>
+
+        <div class="gallery-card gallery-tall stagger-in parallax-img">
+            <img src="/static/images/team/team1.jpg" alt="EvolveX rooftop team">
+            <div class="gallery-overlay">
+                <span>Rooftop Energy</span>
+                <h3>Ideas with a view</h3>
+            </div>
+        </div>
+
+        <div class="gallery-card stagger-in">
+            <img src="/static/images/team/team2.jpg" alt="EvolveX team">
+            <div class="gallery-overlay">
+                <span>Meetups</span>
+                <h3>Showing up</h3>
+            </div>
+        </div>
+
+        <div class="gallery-card stagger-in parallax-img">
+            <img src="/static/images/team/team3.jpg" alt="EvolveX project expo">
+            <div class="gallery-overlay">
+                <span>Exposure</span>
+                <h3>Learning outside rooms</h3>
+            </div>
+        </div>
+
+        <div class="gallery-card gallery-wide stagger-in parallax-img">
+            <img src="/static/images/team/session.jpg" alt="EvolveX speaker session">
+            <div class="gallery-overlay">
+                <span>Speaker Sessions</span>
+                <h3>Listening, questioning, evolving</h3>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

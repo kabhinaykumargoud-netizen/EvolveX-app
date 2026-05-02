@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="dash-head reveal-up"><div><p class="eyebrow">Admin Dashboard</p><h1>EvolveX Cohort Control Room</h1><p class="muted">Manage students, tasks, attendance events, reports and wins.</p></div><div><a class="btn" href="/admin/export.csv">Export CSV</a> <a class="btn ghost" href="/admin/attendance-report.csv">Attendance Report</a></div></section>
+
+<section class="two-col reveal-up">
+  <div class="card stagger-in"><h2>Add Student Profiles</h2><p class="muted">Paste one email or a comma/new-line separated list. Login setup email with generated password will be sent. In local mode, emails print in terminal.</p><form class="form" method="post" action="/admin/add-students"><label>Email IDs<textarea name="emails" placeholder="student1@gmail.com, student2@gmail.com" required></textarea></label><button class="btn">Create Students & Send Login</button></form></div>
+  <div class="card stagger-in"><h2>Create Attendance Event</h2><p class="muted">Create Saturday/Sunday or custom events. Students will see it in Attendance tab.</p><form class="form" method="post" action="/admin/attendance-event"><label>Event Title<input name="title" placeholder="Saturday Founder Session" required></label><label>Date<input name="event_date" type="date" required></label><label>Event Type<select name="event_type">{% for e in event_types %}<option>{{ e }}</option>{% endfor %}</select></label><label>Mode<select name="mode"><option>Offline</option><option>Online</option><option>Hybrid</option></select></label><label>Points<input name="points" type="number" value="15"></label><label>Description<textarea name="description" placeholder="What is this session about?"></textarea></label><button class="btn">Create Event</button></form></div>
+</section>
+
+<section class="card reveal-up stagger-in"><h2>Student Manager</h2><p class="muted">Click any student name to view their public profile. Marking Student of the Week updates the home page and awards a badge.</p><div class="table-wrap"><table>
+<tr><th>Student</th><th>Project</th><th>Points</th><th>Revenue</th><th>Tasks</th><th>Convos</th><th>Sessions</th><th>Controls</th></tr>
+{% for s in students %}
+<tr class="{{ 'featured-row' if s.featured else '' }}">
+  <td><a class="student-link" href="/student/{{ s.id }}">{{ s.name }}</a>{% if s.featured %}<span class="tag">Student of the Week</span>{% endif %}<br><small>{{ s.email }}</small></td>
+  <td>{{ s.project_name }}</td><td><b>{{ s.points }}</b></td><td>₹{{ '%.0f' | format(s.revenue or 0) }}</td><td>{{ s.tasks_done }}</td><td>{{ s.customer_convos }}</td><td>{{ s.sessions_attended }}</td>
+  <td><form class="inline-form admin-student-form" method="post" action="/admin/student/{{ s.id }}">
+    <select name="stage">{% for st in stages %}<option {% if s.stage==st %}selected{% endif %}>{{ st }}</option>{% endfor %}</select>
+    <label class="check"><input type="checkbox" name="featured" {% if s.featured %}checked{% endif %}> Student of Week</label>
+    <input name="sow_description" placeholder="Badge description optional">
+    <input name="sow_date" type="date" value="{{ today }}">
+    <label class="check"><input type="checkbox" name="is_public" {% if s.is_public %}checked{% endif %}> Public</label>
+    <button class="btn small">Save</button>
+  </form></td>
+</tr>{% endfor %}
+</table></div></section>
+
+<section class="two-col reveal-up">
+  <div class="card stagger-in"><h2>Create Weekly Task</h2><form class="form" method="post" action="/admin/task"><label>Week<input name="week" type="number" min="1" max="12" value="{{ current_week }}"></label><label>Title<input name="title" required></label><label>Description<textarea name="description"></textarea></label><label>Points<input name="points" type="number" value="25"></label><label>Due Date<input name="due_date" type="date" required></label><button class="btn">Create Task</button></form></div>
+  <div class="card stagger-in"><h2>Wins Board</h2><p class="muted">Select the Student of the Week and optionally add a description.</p><form class="form" method="post" action="/admin/win"><label>Student of the Week<select name="user_id" required>{% for s in students %}<option value="{{ s.id }}" {% if s.featured %}selected{% endif %}>{{ s.name }}</option>{% endfor %}</select></label><label>Description optional<textarea name="description" placeholder="Example: Shipped prototype, spoke to users, or earned first revenue."></textarea></label><label class="check"><input type="checkbox" name="featured" checked> Show on public home page</label><button class="btn">Update Wins Board</button></form></div>
+</section>
+
+<section class="card reveal-up stagger-in"><h2>Attendance Events</h2><div class="table-wrap"><table><tr><th>Date</th><th>Title</th><th>Type</th><th>Mode</th><th>Points</th><th>Description</th></tr>{% for e in attendance_events %}<tr><td>{{ e.event_date }}</td><td>{{ e.title }}</td><td>{{ e.event_type }}</td><td>{{ e.mode }}</td><td>{{ e.points }}</td><td>{{ e.description }}</td></tr>{% else %}<tr><td colspan="6">No attendance events created yet.</td></tr>{% endfor %}</table></div></section>
+
+<section class="card reveal-up stagger-in"><h2>Editable Task Manager</h2><p class="muted">Edit upcoming weekly tasks directly here. Changes reflect on student dashboard immediately.</p><div class="table-wrap"><table class="task-edit-table"><tr><th>Week</th><th>Task</th><th>Description</th><th>Points</th><th>Due Date</th><th>Action</th></tr>{% for t in tasks %}<tr><form method="post" action="/admin/task"><input type="hidden" name="task_id" value="{{ t.id }}"><td><input name="week" type="number" min="1" max="12" value="{{ t.week }}"></td><td><input name="title" value="{{ t.title }}"></td><td><textarea name="description">{{ t.description }}</textarea></td><td><input name="points" type="number" value="{{ t.points }}"></td><td><input name="due_date" type="date" value="{{ t.due_date }}"></td><td><button class="btn small">Save</button></td></form></tr>{% endfor %}</table></div></section>
+{% endblock %}
